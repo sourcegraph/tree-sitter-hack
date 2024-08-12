@@ -2,25 +2,29 @@
   "targets": [
     {
       "target_name": "tree_sitter_hack_binding",
+      "dependencies": [
+        "<!(node -p \"require('node-addon-api').targets\"):node_addon_api_except",
+      ],
       "include_dirs": [
-        "<!(node -e \"require('nan')\")",
-        "src"
+        "src",
       ],
       "sources": [
-        "src/parser.c",
         "bindings/node/binding.cc",
-        "src/scanner.c"
+        "src/parser.c",
+        "src/scanner.c",
       ],
-      "cflags_c": [
-        "-std=c99",
-        "-Wno-trigraphs"
+      "conditions": [
+        ["OS!='win'", {
+          "cflags_c": [
+            "-std=c11",
+          ],
+        }, { # OS == "win"
+          "cflags_c": [
+            "/std:c11",
+            "/utf-8",
+          ],
+        }],
       ],
-      "xcode_settings": {
-        # Augmented assignment coalesce ??= looks like a C trigraph. Ignore trigraphs.
-        "OTHER_CFLAGS": [
-          "-Wno-trigraphs"
-        ]
-      }
     }
   ]
 }
