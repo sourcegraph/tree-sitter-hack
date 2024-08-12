@@ -3,11 +3,20 @@
   "version": "0.0.4",
   "description": "Hack grammar for tree-sitter",
   "main": "bindings/node",
+  "types": "bindings/node",
   "keywords": [
     "parser",
     "lexer",
     "hacklang",
     "hhvm"
+  ],
+  "files": [
+    "grammar.js",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/**"
   ],
   "author": "Antonio de Jesus Ochoa Solano",
   "license": "MIT",
@@ -19,17 +28,29 @@
     "node": ">=14.7.0"
   },
   "dependencies": {
-    "nan": "^2.14.1"
+    "node-addon-api": "^7.1.0",
+    "node-gyp-build": "^4.8.0"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.21.0"
+  },
+  "peerDependenciesMeta": {
+    "tree_sitter": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "tree-sitter-cli": "~0.20.6"
+    "tree-sitter-cli": "~0.22.6",
+    "prebuildify": "^6.0.0"
   },
   "scripts": {
     "build": "bin/generate-parser --force && node-gyp build",
     "test": "bin/generate-corpus && tree-sitter test",
     "test-corpus": "bin/test-corpus",
     "test-examples": "bin/test-examples",
-    "reset": "rm -rf build node_modules package-lock.json tmp/grammar.js.sha && npm install && npm run build"
+    "reset": "rm -rf build node_modules package-lock.json tmp/grammar.js.sha && npm install && npm run build",
+    "install": "node-gyp-build",
+    "prebuildify": "prebuildify --napi --strip"
   },
   "repository": {
     "type": "git",
